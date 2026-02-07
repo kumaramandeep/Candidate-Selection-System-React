@@ -20,7 +20,7 @@ export const voteService = {
         // For now, we will just return empty or rely on what we have.
         // Let's assume we can get votes and we lack user info.
 
-        const votes = await fetchJson<Vote[]>(`/votes/candidate/${candidateId}`);
+        const votes = await fetchJson<Vote[]>(`/api/votes/candidate/${candidateId}`);
 
         // This is tricky because the UI expects VoteStatus which includes User info.
         // We should really update the backend to return VoteStatus DTOs.
@@ -41,7 +41,7 @@ export const voteService = {
     },
 
     async countSubmitted(candidateId: number): Promise<{ totalMembers: number; submittedMembers: number }> {
-        const votes = await fetchJson<Vote[]>(`/votes/candidate/${candidateId}`);
+        const votes = await fetchJson<Vote[]>(`/api/votes/candidate/${candidateId}`);
         // Mock total members for now or fixed number
         return {
             totalMembers: 3, // demo fixed
@@ -56,7 +56,7 @@ export const voteService = {
         const map = new Map<string, number | null>();
         // inefficient to fetch for each candidate, but ok for demo
         for (const c of candidates) {
-            const votes = await fetchJson<Vote[]>(`/votes/candidate/${c.id}`);
+            const votes = await fetchJson<Vote[]>(`/api/votes/candidate/${c.id}`);
             for (const v of votes) {
                 map.set(`${v.candidateId}:${v.userId}`, v.marks);
             }
@@ -69,7 +69,7 @@ export const voteService = {
     ): Promise<Map<number, { totalMarks: number; totalVotes: number }>> {
         const map = new Map<number, { totalMarks: number; totalVotes: number }>();
         for (const c of candidates) {
-            const votes = await fetchJson<Vote[]>(`/votes/candidate/${c.id}`);
+            const votes = await fetchJson<Vote[]>(`/api/votes/candidate/${c.id}`);
             const totalMarks = votes.reduce((sum, v) => sum + (v.marks || 0), 0);
             map.set(c.id!, {
                 totalMarks,
@@ -80,14 +80,14 @@ export const voteService = {
     },
 
     async deleteByCandidate(candidateId: number): Promise<void> {
-        await fetchJson(`/votes/candidate/${candidateId}`, {
+        await fetchJson(`/api/votes/candidate/${candidateId}`, {
             method: 'DELETE'
         });
     },
 
     async getVoteForUser(candidateId: number, userId: number): Promise<Vote | undefined> {
         // We can filter from all votes or add specific endpoint
-        const votes = await fetchJson<Vote[]>(`/votes/candidate/${candidateId}`);
+        const votes = await fetchJson<Vote[]>(`/api/votes/candidate/${candidateId}`);
         return votes.find(v => v.userId === userId);
     }
 };
