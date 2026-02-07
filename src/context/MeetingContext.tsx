@@ -71,6 +71,28 @@ export function MeetingProvider({ children }: { children: ReactNode }) {
         return unsubscribe;
     }, []);
 
+    // Polling fallback for real-time sync (when WebSocket doesn't work on Render)
+    useEffect(() => {
+        const pollInterval = setInterval(async () => {
+            try {
+                const newState = await meetingService.getState();
+                setState(prev => {
+                    // Only update if something changed to avoid unnecessary re-renders
+                    if (!prev ||
+                        prev.currentCandidateId !== newState.currentCandidateId ||
+                        prev.voteOpen !== newState.voteOpen) {
+                        return newState;
+                    }
+                    return prev;
+                });
+            } catch (e) {
+                // Ignore polling errors
+            }
+        }, 5000); // Poll every 5 seconds
+
+        return () => clearInterval(pollInterval);
+    }, []);
+
     const goToNextCandidate = async (): Promise<boolean> => {
         if (!state?.currentCandidateId) return false;
         const nextId = await candidateService.getNextId(state.currentCandidateId);
