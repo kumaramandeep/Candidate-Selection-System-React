@@ -8,7 +8,7 @@ interface MeetingContextType {
     state: MeetingState | null;
     candidate: CandidateFull | null;
     isLoading: boolean;
-    refreshState: () => Promise<void>;
+    refreshState: () => Promise<MeetingState>;
     refreshCandidate: () => Promise<void>;
     goToNextCandidate: () => Promise<boolean>;
     goToPrevCandidate: () => Promise<boolean>;
