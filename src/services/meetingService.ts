@@ -7,7 +7,7 @@ export const meetingService = {
     },
 
     async setCurrentCandidate(candidateId: number | null): Promise<void> {
-        await fetchJson<MeetingState>(`/meeting/candidate/${candidateId || 0}`, {
+        await fetchJson<MeetingState>(`/api/meeting/candidate/${candidateId || 0}`, {
             method: 'POST'
         });
     },
