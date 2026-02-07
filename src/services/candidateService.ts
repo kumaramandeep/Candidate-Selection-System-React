@@ -8,7 +8,7 @@ export const candidateService = {
 
     async getFull(id: number): Promise<CandidateFull | undefined> {
         try {
-            return await fetchJson<CandidateFull>(`/candidates/${id}`);
+            return await fetchJson<CandidateFull>(`/api/candidates/${id}`);
         } catch (e) {
             return undefined;
         }
@@ -23,21 +23,21 @@ export const candidateService = {
     },
 
     async update(id: number, data: Partial<CandidateFull>): Promise<void> {
-        await fetchJson(`/candidates/${id}`, {
+        await fetchJson(`/api/candidates/${id}`, {
             method: 'PUT',
             body: JSON.stringify(data)
         });
     },
 
     async delete(id: number): Promise<void> {
-        await fetchJson(`/candidates/${id}`, {
+        await fetchJson(`/api/candidates/${id}`, {
             method: 'DELETE'
         });
     },
 
     async getNextId(currentId: number): Promise<number | null> {
         try {
-            return await fetchJson<number>(`/candidates/${currentId}/next`);
+            return await fetchJson<number>(`/api/candidates/${currentId}/next`);
         } catch {
             return null;
         }
@@ -45,7 +45,7 @@ export const candidateService = {
 
     async getPrevId(currentId: number): Promise<number | null> {
         try {
-            return await fetchJson<number>(`/candidates/${currentId}/prev`);
+            return await fetchJson<number>(`/api/candidates/${currentId}/prev`);
         } catch {
             return null;
         }
