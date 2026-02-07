@@ -8,7 +8,7 @@ export const authService = {
     async login(credentials: LoginCredentials): Promise<User> {
         // Phase 2: Call backend login endpoint
         // The backend returns { token, user }
-        const response = await fetchJson<{ token: string; user: User }>('/auth/login', {
+        const response = await fetchJson<{ token: string; user: User }>('/api/auth/login', {
             method: 'POST',
             body: JSON.stringify(credentials)
         });
