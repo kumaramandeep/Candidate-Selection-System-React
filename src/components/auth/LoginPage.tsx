@@ -18,7 +18,6 @@ export default function LoginPage() {
         try {
             const success = await login(username, password);
             if (success) {
-                // Get user role from session to redirect appropriately
                 const user = JSON.parse(sessionStorage.getItem('css_user') || '{}');
                 if (user.role === 'admin') {
                     navigate('/admin');
@@ -39,12 +38,22 @@ export default function LoginPage() {
         <div className="row justify-content-center">
             <div className="col-md-5">
                 <div className="card shadow-sm">
-                    <div className="card-body p-4">
-                        <h4 className="mb-3">Login</h4>
+                    <div className="card-body p-4 text-center">
+                        {/* IAF Logo */}
+                        <img
+                            src="/assets/img/iaf-logo.png"
+                            alt="Indian Air Force"
+                            style={{ height: '120px', marginBottom: '16px' }}
+                        />
+
+                        {/* Application Name */}
+                        <h2 className="mb-1" style={{ fontWeight: 'bold', color: '#1a365d' }}>PromoBoard</h2>
+                        <p className="text-muted mb-4">Officer Promotion Selection System</p>
+
                         {error && (
                             <div className="alert alert-danger">{error}</div>
                         )}
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} className="text-start">
                             <div className="mb-3">
                                 <label className="form-label">Username</label>
                                 <input
@@ -76,8 +85,8 @@ export default function LoginPage() {
                             </button>
                         </form>
                         <div className="text-muted small mt-3">
-                            Demo admin: <code>admin</code> / <code>admin123</code><br />
-                            Demo member: <code>member1</code> / <code>member123</code>
+                            Admin: <code>admin</code> / <code>aman</code><br />
+                            Members: <code>member1</code> / <code>deepak</code>
                         </div>
                     </div>
                 </div>

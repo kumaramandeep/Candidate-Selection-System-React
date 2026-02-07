@@ -14,8 +14,13 @@ export default function Header() {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
             <div className="container-fluid">
-                <Link className="navbar-brand" to={basePath}>
-                    Candidate Selection System
+                <Link className="navbar-brand d-flex align-items-center" to={basePath}>
+                    <img
+                        src="/assets/img/iaf-roundel.png"
+                        alt="IAF"
+                        style={{ height: '32px', marginRight: '10px' }}
+                    />
+                    <span style={{ fontWeight: 'bold' }}>PromoBoard</span>
                 </Link>
 
                 <button
@@ -71,7 +76,7 @@ export default function Header() {
                         <li className="nav-item">
                             <span className="nav-link text-light">
                                 <i className="bi bi-person-circle me-1"></i>
-                                {user.fullName} ({user.role})
+                                {user.fullName}
                             </span>
                         </li>
                         <li className="nav-item">

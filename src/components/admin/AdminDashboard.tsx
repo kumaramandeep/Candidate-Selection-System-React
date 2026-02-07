@@ -72,7 +72,7 @@ export default function AdminDashboard() {
         <div>
             <div className="d-flex flex-wrap justify-content-between align-items-center mb-3">
                 <div>
-                    <h2 className="mb-0">Admin / HR Manager Dashboard</h2>
+                    <h2 className="mb-0">Admin Dashboard</h2>
                     <div className="text-muted small">
                         Controls the meeting. Changing candidate here syncs to all members in real-time.
                     </div>

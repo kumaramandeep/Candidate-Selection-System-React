@@ -63,7 +63,7 @@ export default function MemberDashboard() {
                 <div>
                     <h2 className="mb-0">Member Dashboard</h2>
                     <div className="text-muted small">
-                        Candidate profile is controlled by the Admin/HR Manager. Switching candidate happens automatically in real-time.
+                        Candidate profile is controlled by the Admin. Switching candidate happens automatically in real-time.
                     </div>
                 </div>
                 <span className="badge text-bg-info fs-6">
