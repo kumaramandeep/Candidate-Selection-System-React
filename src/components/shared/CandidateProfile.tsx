@@ -11,7 +11,7 @@ export default function CandidateProfile({ candidateData, showPhoto = true }: Ca
     const c = candidateData;
     const photoUrl = c.photoPath && c.photoPath.startsWith('http')
         ? c.photoPath
-        : `/assets/img/placeholder.jpg`;
+        : `/assets/img/placeholder.svg`;
 
     return (
         <div>
@@ -23,7 +23,7 @@ export default function CandidateProfile({ candidateData, showPhoto = true }: Ca
                         alt="Candidate Photo"
                         style={{ width: '100px', height: '100px', objectFit: 'cover' }}
                         onError={(e) => {
-                            (e.target as HTMLImageElement).src = '/assets/img/placeholder.jpg';
+                            (e.target as HTMLImageElement).src = '/assets/img/placeholder.svg';
                         }}
                     />
                 )}
