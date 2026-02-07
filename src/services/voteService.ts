@@ -3,7 +3,7 @@ import type { Vote, VoteStatus, Candidate, User } from '../types';
 
 export const voteService = {
     async upsertMarks(candidateId: number, userId: number, marks: number): Promise<void> {
-        await fetchJson<Vote>('/votes', {
+        await fetchJson<Vote>('/api/votes', {
             method: 'POST',
             body: JSON.stringify({ candidateId, userId, marks })
         });

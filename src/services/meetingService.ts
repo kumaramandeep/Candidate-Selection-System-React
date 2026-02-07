@@ -3,7 +3,7 @@ import type { MeetingState } from '../types';
 
 export const meetingService = {
     async getState(): Promise<MeetingState> {
-        return fetchJson<MeetingState>('/meeting');
+        return fetchJson<MeetingState>('/api/meeting');
     },
 
     async setCurrentCandidate(candidateId: number | null): Promise<void> {
@@ -13,13 +13,13 @@ export const meetingService = {
     },
 
     async openVote(): Promise<void> {
-        await fetchJson<MeetingState>('/meeting/vote/open', {
+        await fetchJson<MeetingState>('/api/meeting/vote/open', {
             method: 'POST'
         });
     },
 
     async closeVote(): Promise<void> {
-        await fetchJson<MeetingState>('/meeting/vote/close', {
+        await fetchJson<MeetingState>('/api/meeting/vote/close', {
             method: 'POST'
         });
     }

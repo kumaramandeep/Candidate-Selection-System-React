@@ -3,7 +3,7 @@ import type { Candidate, CandidateFull, User } from '../types';
 
 export const candidateService = {
     async listBasic(): Promise<Candidate[]> {
-        return fetchJson<Candidate[]>('/candidates');
+        return fetchJson<Candidate[]>('/api/candidates');
     },
 
     async getFull(id: number): Promise<CandidateFull | undefined> {
@@ -15,7 +15,7 @@ export const candidateService = {
     },
 
     async create(data: Omit<CandidateFull, 'id'>): Promise<number> {
-        const result = await fetchJson<Candidate>('/candidates', {
+        const result = await fetchJson<Candidate>('/api/candidates', {
             method: 'POST',
             body: JSON.stringify(data)
         });
@@ -69,7 +69,7 @@ export const candidateService = {
 export const userService = {
     async listAll(): Promise<User[]> {
         try {
-            return await fetchJson<User[]>('/users');
+            return await fetchJson<User[]>('/api/users');
         } catch {
             return [];
         }
@@ -77,7 +77,7 @@ export const userService = {
 
     async listMembers(): Promise<User[]> {
         try {
-            const users = await fetchJson<User[]>('/users');
+            const users = await fetchJson<User[]>('/api/users');
             return users.filter(u => u.role === 'member');
         } catch {
             return [];
@@ -90,7 +90,7 @@ export const userService = {
         password: string;
         role: 'admin' | 'member';
     }): Promise<number> {
-        const result = await fetchJson<User>('/auth/register', {
+        const result = await fetchJson<User>('/api/auth/register', {
             method: 'POST',
             body: JSON.stringify(data)
         });
