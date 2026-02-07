@@ -120,7 +120,7 @@ export default function MembersPage() {
                                 <div className="table-responsive">
                                     <table className="table table-sm align-middle">
                                         <thead>
-                                            <tr><th>ID</th><th>Name</th><th>Username</th><th>Role</th><th>Created</th></tr>
+                                            <tr><th>ID</th><th>Name</th><th>Username</th><th>Role</th></tr>
                                         </thead>
                                         <tbody>
                                             {members.map(m => (
@@ -133,7 +133,6 @@ export default function MembersPage() {
                                                             {m.role}
                                                         </span>
                                                     </td>
-                                                    <td className="text-muted small">{new Date(m.createdAt).toLocaleDateString()}</td>
                                                 </tr>
                                             ))}
                                         </tbody>

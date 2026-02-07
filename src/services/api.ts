@@ -30,5 +30,5 @@ export async function fetchJson<T>(url: string, options: RequestInit = {}): Prom
 
     // Handle empty responses
     const text = await response.text();
-    return text ? JSON.parse(text) : undefined;
+    return text ? JSON.parse(text) : (undefined as unknown as T);
 }

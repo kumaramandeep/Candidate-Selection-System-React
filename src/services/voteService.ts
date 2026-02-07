@@ -36,7 +36,7 @@ export const voteService = {
             username: 'member' + v.userId,
             role: 'member',
             marks: v.marks,
-            submittedAt: v.submittedAt
+            submittedAt: v.submittedAt || null
         }));
     },
 

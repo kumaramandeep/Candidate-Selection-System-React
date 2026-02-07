@@ -6,8 +6,8 @@ interface CandidateTabsProps {
 }
 
 export default function CandidateTabs({ candidate }: CandidateTabsProps) {
-    const { personal, qualifications, experiences, certifications } = candidate;
-    const c = candidate.candidate;
+    const { personal, qualifications = [], experiences = [], certifications = [] } = candidate;
+    const c = candidate;
 
     return (
         <>

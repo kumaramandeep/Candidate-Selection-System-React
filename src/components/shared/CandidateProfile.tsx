@@ -8,8 +8,8 @@ interface CandidateProfileProps {
 }
 
 export default function CandidateProfile({ candidateData, showPhoto = true }: CandidateProfileProps) {
-    const c = candidateData.candidate;
-    const photoUrl = c.photoPath.startsWith('http')
+    const c = candidateData;
+    const photoUrl = c.photoPath && c.photoPath.startsWith('http')
         ? c.photoPath
         : `/assets/img/placeholder.jpg`;
 

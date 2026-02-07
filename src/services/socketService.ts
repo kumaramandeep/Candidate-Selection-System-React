@@ -6,7 +6,7 @@ class SocketService {
     private listeners: Map<string, Set<(data: unknown) => void>> = new Map();
     private connected = false;
 
-    connect(userId?: number, role?: string): void {
+    connect(_userId?: number, _role?: string): void {
         if (this.client?.active) return;
 
         // Use current host but ws protocol, or rely on SockJS fallback
@@ -62,11 +62,11 @@ class SocketService {
     // So we'll keep these methods empty or remove them, but to avoid breaking types, we'll leave them as no-ops for now
     // or rely on the services to call REST APIs.
 
-    emitMeetingUpdate(payload: { currentCandidateId: number | null; voteOpen: boolean }): void {
+    emitMeetingUpdate(_payload: { currentCandidateId: number | null; voteOpen: boolean }): void {
         // No-op: API call in meetingService handles this
     }
 
-    emitVoteSubmitted(payload: { candidateId: number; userId: number; marks: number | null }): void {
+    emitVoteSubmitted(_payload: { candidateId: number; userId: number; marks: number | null }): void {
         // No-op: API call in voteService handles this
     }
 

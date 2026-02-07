@@ -33,7 +33,7 @@ export function MeetingProvider({ children }: { children: ReactNode }) {
     const refreshCandidate = useCallback(async () => {
         if (state?.currentCandidateId) {
             const fullCandidate = await candidateService.getFull(state.currentCandidateId);
-            setCandidate(fullCandidate);
+            setCandidate(fullCandidate || null);
         } else {
             setCandidate(null);
         }
@@ -52,7 +52,7 @@ export function MeetingProvider({ children }: { children: ReactNode }) {
     // Load candidate when state changes
     useEffect(() => {
         if (state?.currentCandidateId) {
-            candidateService.getFull(state.currentCandidateId).then(setCandidate);
+            candidateService.getFull(state.currentCandidateId).then(c => setCandidate(c || null));
         } else {
             setCandidate(null);
         }
