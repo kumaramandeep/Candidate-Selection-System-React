@@ -12,7 +12,7 @@ class SocketService {
         // Use current host but ws protocol, or rely on SockJS fallback
         // Since we are proxying, we can point to /ws
         // Use env var for socket url, converting http/https to ws/wss
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        const apiUrl = import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || 'http://localhost:3000';
         const wsUrl = apiUrl.replace(/^http/, 'ws');
         const brokerURL = `${wsUrl}/ws`;
 
