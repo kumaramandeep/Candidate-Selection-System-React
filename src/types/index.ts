@@ -18,6 +18,29 @@ export interface Candidate {
     totalExperienceYears?: number;
     expertise?: string;
     photoPath?: string;
+    // Military fields
+    employeeId?: string;
+    branch?: string;
+    timer?: number;
+    rank?: string;
+    unit?: string;
+    appt?: string;
+    dop?: string;
+    dor?: string;
+    category?: string;
+    decorations?: string;
+    relyingHrs?: number;
+    photo2Path?: string;
+    reviewed?: boolean;
+    // Personal fields (direct access)
+    phone?: string;
+    email?: string;
+    nationality?: string;
+    currentAddress?: string;
+    permanentAddress?: string;
+    dob?: string;
+    gender?: string;
+    maritalStatus?: string;
     // Navigation helpers
     nextCandidateId?: number | null;
     prevCandidateId?: number | null;

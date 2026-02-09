@@ -5,6 +5,8 @@ import { MeetingProvider } from '../context/MeetingContext';
 import Header from './shared/Header';
 import ProtectedRoute from './shared/ProtectedRoute';
 import LoginPage from './auth/LoginPage';
+import HomePage from './admin/HomePage';
+import PreBoardSetupPage from './admin/PreBoardSetupPage';
 import AdminDashboard from './admin/AdminDashboard';
 import MemberDashboard from './member/MemberDashboard';
 import CandidatesPage from './admin/CandidatesPage';
@@ -16,15 +18,36 @@ function AppRoutes() {
         <Routes>
             <Route path="/login" element={<LoginPage />} />
 
-            {/* Admin routes */}
+            {/* Admin Home */}
             <Route
                 path="/admin"
+                element={
+                    <ProtectedRoute requiredRole="admin">
+                        <HomePage />
+                    </ProtectedRoute>
+                }
+            />
+
+            {/* Pre-Board Setup */}
+            <Route
+                path="/admin/preboard"
+                element={
+                    <ProtectedRoute requiredRole="admin">
+                        <PreBoardSetupPage />
+                    </ProtectedRoute>
+                }
+            />
+
+            {/* Admin Dashboard (Candidate Profile) */}
+            <Route
+                path="/admin/dashboard"
                 element={
                     <ProtectedRoute requiredRole="admin">
                         <AdminDashboard />
                     </ProtectedRoute>
                 }
             />
+
             <Route
                 path="/admin/candidates"
                 element={
