@@ -4,6 +4,7 @@ import { useMeeting } from '../../context/MeetingContext';
 import { voteService } from '../../services/voteService';
 import { socketService } from '../../services/socketService';
 import { markAsReviewed } from '../../services/statisticsService';
+import { candidateService } from '../../services/candidateService';
 import CandidateTabs from '../shared/CandidateTabs';
 import type { VoteStatus, CandidateFull } from '../../types';
 
@@ -29,9 +30,13 @@ export default function AdminDashboard() {
     useEffect(() => {
         const candidateId = searchParams.get('candidateId');
         if (candidateId && setCurrentCandidate) {
-            setCurrentCandidate(Number(candidateId));
+            const id = Number(candidateId);
+            // Only update if different to avoid loops
+            if (state?.currentCandidateId !== id) {
+                setCurrentCandidate(id);
+            }
         }
-    }, [searchParams, setCurrentCandidate]);
+    }, [searchParams, setCurrentCandidate, state?.currentCandidateId]);
 
     // Update current index based on session
     useEffect(() => {
@@ -65,17 +70,24 @@ export default function AdminDashboard() {
             const nextIdx = currentIndex + 1;
             if (nextIdx < sessionInfo.candidateIds.length) {
                 const nextId = sessionInfo.candidateIds[nextIdx];
-                setCurrentCandidate?.(nextId);
-                setCurrentIndex(nextIdx);
-                // Mark current as reviewed
+
+                // Mark current as reviewed before switching
                 if (state?.currentCandidateId) {
                     markAsReviewed(state.currentCandidateId);
                 }
+
+                setCurrentIndex(nextIdx);
+                navigate(`?candidateId=${nextId}`);
             }
         } else {
+            if (!state?.currentCandidateId) return;
             setIsNavigating(true);
-            await goToNextCandidate();
+            const nextId = await candidateService.getNextId(state.currentCandidateId);
             setIsNavigating(false);
+
+            if (nextId) {
+                navigate(`?candidateId=${nextId}`);
+            }
         }
     };
 
@@ -84,13 +96,18 @@ export default function AdminDashboard() {
             const prevIdx = currentIndex - 1;
             if (prevIdx >= 0) {
                 const prevId = sessionInfo.candidateIds[prevIdx];
-                setCurrentCandidate?.(prevId);
                 setCurrentIndex(prevIdx);
+                navigate(`?candidateId=${prevId}`);
             }
         } else {
+            if (!state?.currentCandidateId) return;
             setIsNavigating(true);
-            await goToPrevCandidate();
+            const prevId = await candidateService.getPrevId(state.currentCandidateId);
             setIsNavigating(false);
+
+            if (prevId) {
+                navigate(`?candidateId=${prevId}`);
+            }
         }
     };
 

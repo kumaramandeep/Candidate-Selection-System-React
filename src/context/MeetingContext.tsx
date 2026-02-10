@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react';
 import { meetingService } from '../services/meetingService';
 import { candidateService } from '../services/candidateService';
 import { socketService } from '../services/socketService';
@@ -23,6 +23,14 @@ export function MeetingProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<MeetingState | null>(null);
     const [candidate, setCandidate] = useState<CandidateFull | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    // Track when we're in the middle of an action to skip polling
+    const skipPollUntilRef = useRef<number>(0);
+
+    const pausePolling = () => {
+        // Skip polling for 10 seconds after any state-changing action
+        skipPollUntilRef.current = Date.now() + 10000;
+    };
 
     const refreshState = useCallback(async () => {
         const newState = await meetingService.getState();
@@ -74,6 +82,10 @@ export function MeetingProvider({ children }: { children: ReactNode }) {
     // Polling fallback for real-time sync (when WebSocket doesn't work on Render)
     useEffect(() => {
         const pollInterval = setInterval(async () => {
+            // Skip polling if we recently performed an action
+            if (Date.now() < skipPollUntilRef.current) {
+                return;
+            }
             try {
                 const newState = await meetingService.getState();
                 setState(prev => {
@@ -98,6 +110,7 @@ export function MeetingProvider({ children }: { children: ReactNode }) {
         const nextId = await candidateService.getNextId(state.currentCandidateId);
         if (!nextId) return false;
 
+        pausePolling();
         await meetingService.setCurrentCandidate(nextId);
         const newState = await refreshState();
 
@@ -115,6 +128,7 @@ export function MeetingProvider({ children }: { children: ReactNode }) {
         const prevId = await candidateService.getPrevId(state.currentCandidateId);
         if (!prevId) return false;
 
+        pausePolling();
         await meetingService.setCurrentCandidate(prevId);
         const newState = await refreshState();
 
@@ -128,6 +142,7 @@ export function MeetingProvider({ children }: { children: ReactNode }) {
     };
 
     const setCurrentCandidate = async (id: number): Promise<void> => {
+        pausePolling();
         await meetingService.setCurrentCandidate(id);
         const newState = await refreshState();
 
@@ -139,6 +154,7 @@ export function MeetingProvider({ children }: { children: ReactNode }) {
     };
 
     const openVote = async (): Promise<void> => {
+        pausePolling();
         await meetingService.openVote();
         const newState = await refreshState();
 
@@ -149,6 +165,7 @@ export function MeetingProvider({ children }: { children: ReactNode }) {
     };
 
     const closeVote = async (): Promise<void> => {
+        pausePolling();
         await meetingService.closeVote();
         const newState = await refreshState();
 
