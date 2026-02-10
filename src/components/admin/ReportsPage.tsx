@@ -13,27 +13,38 @@ export default function ReportsPage() {
     const [totals, setTotals] = useState<Map<number, { totalMarks: number; totalVotes: number }>>(new Map());
     const [isLoading, setIsLoading] = useState(true);
 
+    const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
         loadReportData();
     }, []);
 
     const loadReportData = async () => {
         setIsLoading(true);
-        const [candList, memberList] = await Promise.all([
-            candidateService.listBasic(),
-            userService.listMembers()
-        ]);
+        setError(null);
+        try {
+            const [candList, memberList] = await Promise.all([
+                candidateService.listBasic(),
+                userService.listMembers()
+            ]);
 
-        setCandidates(candList);
-        setMembers(memberList);
+            setCandidates(candList);
+            setMembers(memberList);
 
-        const marks = await voteService.marksMap(candList, memberList);
-        setMarksMap(marks);
+            // Fetch votes in parallel for better performance
+            const [marks, tots] = await Promise.all([
+                voteService.marksMap(candList, memberList),
+                voteService.totalsByCandidate(candList)
+            ]);
 
-        const tots = await voteService.totalsByCandidate(candList);
-        setTotals(tots);
-
-        setIsLoading(false);
+            setMarksMap(marks);
+            setTotals(tots);
+        } catch (err) {
+            console.error('Failed to load report data:', err);
+            setError('Failed to load report data. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const exportCSV = () => {

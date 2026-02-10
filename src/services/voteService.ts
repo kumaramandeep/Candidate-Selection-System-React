@@ -72,12 +72,18 @@ export const voteService = {
         members: User[]
     ): Promise<Map<string, number | null>> {
         const map = new Map<string, number | null>();
-        for (const c of candidates) {
-            const votes = await fetchJson<Vote[]>(`/api/votes/candidate/${c.id}`);
-            for (const v of votes) {
-                map.set(`${v.candidateId}:${v.userId}`, v.marks);
+
+        await Promise.all(candidates.map(async (c) => {
+            try {
+                const votes = await fetchJson<Vote[]>(`/api/votes/candidate/${c.id}`);
+                for (const v of votes) {
+                    map.set(`${v.candidateId}:${v.userId}`, v.marks);
+                }
+            } catch (err) {
+                console.error(`Failed to fetch votes for candidate ${c.id}:`, err);
             }
-        }
+        }));
+
         return map;
     },
 
@@ -85,14 +91,21 @@ export const voteService = {
         candidates: Candidate[]
     ): Promise<Map<number, { totalMarks: number; totalVotes: number }>> {
         const map = new Map<number, { totalMarks: number; totalVotes: number }>();
-        for (const c of candidates) {
-            const votes = await fetchJson<Vote[]>(`/api/votes/candidate/${c.id}`);
-            const totalMarks = votes.reduce((sum, v) => sum + (v.marks || 0), 0);
-            map.set(c.id!, {
-                totalMarks,
-                totalVotes: votes.length
-            });
-        }
+
+        await Promise.all(candidates.map(async (c) => {
+            try {
+                const votes = await fetchJson<Vote[]>(`/api/votes/candidate/${c.id}`);
+                const totalMarks = votes.reduce((sum, v) => sum + (v.marks || 0), 0);
+                map.set(c.id!, {
+                    totalMarks,
+                    totalVotes: votes.length
+                });
+            } catch (err) {
+                console.error(`Failed to fetch votes for candidate ${c.id}:`, err);
+                map.set(c.id!, { totalMarks: 0, totalVotes: 0 });
+            }
+        }));
+
         return map;
     },
 
